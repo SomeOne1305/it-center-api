@@ -1,24 +1,26 @@
-import { IsNotEmpty, IsPhoneNumber, IsString,isPhoneNumber } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { IsValidType } from 'src/decorators/isValidType.decorator';
 
 export class CreateStudentDto {
-  @ApiProperty({required:true, default:"Abduraim"})
+  @ApiProperty({ required: true, default: 'Abduraim' })
   @IsNotEmpty()
   @IsString()
-  name:string;
+  name: string;
 
-  @ApiProperty({required:true, default:"Qo'ziyev"})
+  @ApiProperty({ required: true, default: "Qo'ziyev" })
   @IsNotEmpty()
   @IsString()
-  surname:string;
+  surname: string;
 
-  @ApiProperty({required:true, default:"+998912345678"})
+  @ApiProperty({ required: true, default: '+998912345678' })
   @IsNotEmpty()
   @IsString()
-  @IsPhoneNumber("UZ")
-  phone_number:string;
+  @IsPhoneNumber('UZ')
+  phone_number: string;
 
-  @ApiProperty({required:true, default:"web"})
+  @ApiProperty({ required: true, default: 'web' })
   @IsNotEmpty()
-  course:"web"|"computer-learning"|"computer-repairing"
+  @IsValidType()
+  course: 'web' | 'computer-learning' | 'computer-repairing';
 }

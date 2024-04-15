@@ -1,20 +1,15 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  BadRequestException,
-} from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
 import { MailerService } from '@nestjs-modules/mailer';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 //DTOS
-import { UpdateStudentDto } from './dto/update-student.dto';
 import { CreateStudentDto } from './dto/create-student.dto';
 //Schemas
-import { StudentDocument, Student } from './schema/student.schema';
-import { RequestDocument, Requests } from './schema/requests.schema';
-import { identifyCourse } from 'src/helpers';
 import { isMongoId } from 'class-validator';
+import { identifyCourse } from 'src/helpers';
+import renderTemplate from 'src/mail/template';
+import { RequestDocument, Requests } from './schema/requests.schema';
+import { Student, StudentDocument } from './schema/student.schema';
 
 @Injectable()
 export class StudentsService {
@@ -26,15 +21,18 @@ export class StudentsService {
     private readonly mailer: MailerService,
   ) {}
 
-
   async create(createStudentDto: CreateStudentDto) {
     try {
       const data = await this.requestedCustomers.create(createStudentDto);
       await this.mailer.sendMail({
-        from:"anonymousmrx55@mail.ru",
-        to: 'anonymousmrx55@gmail.com',
+        from: 'anonymousmrx55@mail.ru',
+        to: 'itpark00001@gmail.com',
         subject: `${data.name} ${data.surname} ${identifyCourse(data.course)} kursiga yozildi.`,
-        template: '',
+        html: renderTemplate(
+          data.name,
+          data.surname,
+          identifyCourse(data.course),
+        ),
       });
       return {
         status: 201,
@@ -46,7 +44,7 @@ export class StudentsService {
         status: 500,
         message: error,
         data: [],
-      })
+      });
     }
   }
 
@@ -58,7 +56,11 @@ export class StudentsService {
         data: await this.requestedCustomers.find({}),
       };
     } catch (error) {
-      throw error;
+      return {
+        success: false,
+        message: error.response.data.message,
+        error: error.response.data.error,
+      };
     }
   }
 
@@ -71,7 +73,11 @@ export class StudentsService {
           data: await this.requestedCustomers.findById(id),
         };
       } catch (error) {
-        throw error;
+        return {
+          success: false,
+          message: error.response.data.message,
+          error: error.response.data.error,
+        };
       }
     } else {
       throw new BadRequestException({
@@ -99,9 +105,9 @@ export class StudentsService {
         };
       } catch (error) {
         return {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'Error occured',
-          error: error,
+          success: false,
+          message: error.response.data.message,
+          error: error.response.data.error,
         };
       }
     } else {
@@ -121,7 +127,11 @@ export class StudentsService {
           data: await this.requestedCustomers.findByIdAndDelete(id),
         };
       } catch (error) {
-        throw error;
+        return {
+          success: false,
+          message: error.response.data.message,
+          error: error.response.data.error,
+        };
       }
     } else {
       throw new BadRequestException({
@@ -131,7 +141,7 @@ export class StudentsService {
     }
   }
 
-  async findAllStudents(){
+  async findAllStudents() {
     try {
       return {
         status: 200,
@@ -139,13 +149,52 @@ export class StudentsService {
         data: await this.students.find({}),
       };
     } catch (error) {
-      return{
-        status:HttpStatus.BAD_REQUEST,
-        message:"Error occured",
-        error
-      }
+      return {
+        success: false,
+        message: error.response.data.message,
+        error: error.response.data.error,
+      };
     }
   }
 
-  
+  async deleteStudent(id: string) {
+    if (isMongoId(id)) {
+      try {
+        await this.students.deleteOne({ _id: id });
+        return {
+          status: HttpStatus.OK,
+          message: 'Student is removed successfully !',
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: error.response.data.message,
+          error: error.response.data.error,
+        };
+      }
+    } else {
+      throw new BadRequestException({
+        status: HttpStatus.BAD_REQUEST,
+        message: 'Invalid ID',
+      });
+    }
+  }
+
+  async GetStudentByCategory(
+    course: 'web' | 'computer-learning' | 'computer-repairing',
+  ) {
+    try {
+      return {
+        status: 200,
+        message: 'Datas are ready to use',
+        data: await this.students.find({ course: course }),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response.data.message,
+        error: error.response.data.error,
+      };
+    }
+  }
 }
