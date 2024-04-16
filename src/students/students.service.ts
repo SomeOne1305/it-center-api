@@ -33,24 +33,18 @@ export class StudentsService {
           data.surname,
           identifyCourse(data.course),
         ),
-        attachments:[{
-          filename:'logo.svg',
-          path:"/assets/images/icons/",
-          cid:'it-center.pro'
-        }]
       });
-      //https://it-center.pro/assets/images/icons/logo.svg
       return {
         status: 201,
         message: 'You are registered successfully',
         data,
       };
     } catch (error) {
-      throw new BadRequestException({
+      throw {
         status: 500,
         message: error,
         data: [],
-      });
+      };
     }
   }
 
@@ -147,6 +141,22 @@ export class StudentsService {
     }
   }
 
+  async deleteManyOnReq(ids: string[]) {
+    try {
+      await this.requestedCustomers.deleteMany({ _id: { $in: ids } }).exec();
+      return {
+        status: HttpStatus.OK,
+        message: 'Deleted successfully',
+      };
+    } catch (error) {
+      throw {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        error,
+      };
+    }
+  }
+
   async findAllStudents() {
     try {
       return {
@@ -183,6 +193,22 @@ export class StudentsService {
         status: HttpStatus.BAD_REQUEST,
         message: 'Invalid ID',
       });
+    }
+  }
+
+  async deleteManyOnStudents(ids: string[]) {
+    try {
+      await this.students.deleteMany({ _id: { $in: ids } }).exec();
+      return {
+        status: HttpStatus.OK,
+        message: 'Deleted successfully',
+      };
+    } catch (error) {
+      throw {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        error,
+      };
     }
   }
 

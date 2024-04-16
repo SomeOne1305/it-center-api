@@ -3,6 +3,24 @@ export default function renderTemplate(
   surname: string,
   course: string,
 ): string {
+  const months = [
+    'Yanvar',
+    'Fevral',
+    'Mart',
+    'Aprel',
+    'May',
+    'Iyun',
+    'Iyul',
+    'Avgust',
+    'Sentabr',
+    'Oktabr',
+    'Noyabr',
+    'Dekabr',
+  ];
+  const day = new Date().getDate();
+  const month = new Date().getMonth();
+  const year = new Date().getFullYear();
+  const date = `${day} ${months[month]}, ${year}`;
   return `
   <!DOCTYPE html>
 <html lang="en">
@@ -26,8 +44,10 @@ export default function renderTemplate(
       display: flex;
       align-items: center;
     }
-
-    .logo {
+    .logo{
+      text-decoration:none;
+    }
+    .logo img{
       max-width: 150px;
       width: 100%;
     }
@@ -36,6 +56,7 @@ export default function renderTemplate(
       color: white;
       font-size: large;
       margin-left: auto;
+      margin-top:7px;
     }
 
     .content {
@@ -58,6 +79,7 @@ export default function renderTemplate(
     }
 
     .list {
+      font-size:17px;
       padding: 7px;
       margin-left: 10px;
     }
@@ -72,8 +94,8 @@ export default function renderTemplate(
 
     .confirm-button {
       text-decoration: none;
-      padding: 5px 8px;
-      border-radius: 7px;
+      padding: 7px 12px;
+      border-radius: 8px;
       background: #19e302;
       color: white;
       margin-left: auto;
@@ -84,10 +106,10 @@ export default function renderTemplate(
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">
-        <img src="cid:it-center.pro" alt="Logo">
-      </div>
-      <span class="date">12 Nov, 2024</span>
+      <a href="#" class="logo">
+        <img src="https://raw.githubusercontent.com/it-centre/images/main/logo.png" alt="logo">
+      </a>
+      <span class="date">${date}</span>
     </div>
     <div class="content">
       <span class="greeting">Hey <b>Admin</b>,</span>

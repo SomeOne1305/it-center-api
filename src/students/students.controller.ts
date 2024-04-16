@@ -45,6 +45,12 @@ export class StudentsController {
   }
 
   @HttpCode(200)
+  @Delete('on-register/delete-many')
+  deleteManyReq(@Body() ids: string[]) {
+    return this.studentsService.deleteManyOnReq(ids);
+  }
+
+  @HttpCode(200)
   @Get('on-process')
   findAllStudents() {
     return this.studentsService.findAllStudents();
@@ -62,5 +68,11 @@ export class StudentsController {
   @Delete('on-process/:id')
   deleteStudent(@Param('id') id: string) {
     return this.studentsService.deleteStudent(id);
+  }
+
+  @HttpCode(200)
+  @Delete('on-process/delete-many')
+  deleteManyStudent(@Body() ids: string[]) {
+    return this.studentsService.deleteManyOnStudents(ids);
   }
 }
