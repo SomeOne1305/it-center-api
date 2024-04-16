@@ -85,7 +85,7 @@ export default function renderTemplate(
   <div class="container">
     <div class="header">
       <div class="logo">
-        <img src="https://it-center.pro/assets/images/icons/logo.svg" alt="Logo">
+        <img src="cid:it-center.pro" alt="Logo">
       </div>
       <span class="date">12 Nov, 2024</span>
     </div>

@@ -33,7 +33,13 @@ export class StudentsService {
           data.surname,
           identifyCourse(data.course),
         ),
+        attachments:[{
+          filename:'logo.svg',
+          path:"/assets/images/icons/",
+          cid:'it-center.pro'
+        }]
       });
+      //https://it-center.pro/assets/images/icons/logo.svg
       return {
         status: 201,
         message: 'You are registered successfully',
