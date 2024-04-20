@@ -6,8 +6,8 @@ import { Model } from 'mongoose';
 import { CreateStudentDto } from './dto/create-student.dto';
 //Schemas
 import { isMongoId } from 'class-validator';
-import { identifyCourse } from 'src/helpers';
-import renderTemplate from 'src/mail/template';
+import { identifyCourse } from '../helpers';
+import renderTemplate from '../mail/template';
 import { RequestDocument, Requests } from './schema/requests.schema';
 import { Student, StudentDocument } from './schema/student.schema';
 
