@@ -6,6 +6,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -65,14 +66,14 @@ export class StudentsController {
   }
 
   @HttpCode(200)
-  @Delete('on-process/:id')
+  @Delete('on-process/delete/:id')
   deleteStudent(@Param('id') id: string) {
     return this.studentsService.deleteStudent(id);
   }
 
   @HttpCode(200)
   @Delete('on-process/delete-many')
-  deleteManyStudent(@Body() ids: string[]) {
+  deleteManyStudent(@Query('id') ids: string[]) {
     return this.studentsService.deleteManyOnStudents(ids);
   }
 }
