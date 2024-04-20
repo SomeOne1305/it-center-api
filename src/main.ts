@@ -2,11 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+//configs
+import appConfig from './configs/app.config'
+
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('/v1/api');
+  const port = 3000 || process.env.PORT
+  // app.setGlobalPrefix('/v1/api');
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: appConfig(),
     methods: ['GET', 'POST', 'DELETE', 'PUT'],
   });
 
