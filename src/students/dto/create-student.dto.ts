@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
-import { IsValidType } from 'src/decorators/isValidType.decorator';
+import { IsValidType } from '../../decorators/isValidType.decorator';
 
 export class CreateStudentDto {
   @ApiProperty({ required: true, default: 'Abduraim' })

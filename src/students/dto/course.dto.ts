@@ -1,4 +1,4 @@
-import { IsValidType } from 'src/decorators/isValidType.decorator';
+import { IsValidType } from '../../decorators/isValidType.decorator';
 
 export class CourseTypeDto {
   @IsValidType()
