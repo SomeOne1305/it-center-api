@@ -66,7 +66,10 @@ export class StudentsService {
       return {
         status: 200,
         message: 'Datas are ready to use',
-        data: await this.requestedCustomers.find({}),
+        data: await this.requestedCustomers
+          .find({})
+          .sort({ createdAt: -1 })
+          .exec(),
       };
     } catch (error) {
       return {
@@ -175,7 +178,7 @@ export class StudentsService {
       return {
         status: 200,
         message: 'Datas are ready to use',
-        data: await this.students.find({}),
+        data: await this.students.find({}).sort({ createdAt: -1 }).exec(),
       };
     } catch (error) {
       return {
