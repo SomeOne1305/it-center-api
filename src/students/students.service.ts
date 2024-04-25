@@ -23,22 +23,35 @@ export class StudentsService {
 
   async create(createStudentDto: CreateStudentDto) {
     try {
-      const data = await this.requestedCustomers.create(createStudentDto);
-      await this.mailer.sendMail({
-        from: 'anonymousmrx55@mail.ru',
-        to: 'itpark00001@gmail.com',
-        subject: `${data.name} ${data.surname} ${identifyCourse(data.course)} kursiga yozildi.`,
-        html: renderTemplate(
-          data.name,
-          data.surname,
-          identifyCourse(data.course),
-        ),
+      const isExist = await this.requestedCustomers.exists({
+        name: createStudentDto.name,
+        surname: createStudentDto.surname,
+        course: createStudentDto.course,
       });
-      return {
-        status: 201,
-        message: 'You are registered successfully',
-        data,
-      };
+      if (!isExist) {
+        const data = await this.requestedCustomers.create(createStudentDto);
+        await this.mailer.sendMail({
+          from: 'anonymousmrx55@mail.ru',
+          to: 'itpark00001@gmail.com',
+          subject: `${data.name} ${data.surname} ${identifyCourse(data.course)} kursiga yozildi.`,
+          html: renderTemplate(
+            data.name,
+            data.surname,
+            identifyCourse(data.course),
+          ),
+        });
+        return {
+          status: 201,
+          message: 'You are registered successfully',
+          data,
+        };
+      } else {
+        return {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Request has already been registered',
+          data: null,
+        };
+      }
     } catch (error) {
       throw {
         status: 500,
